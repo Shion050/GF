@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#fff7fb">
+	<title>มีอะไรอยากบอก... 💌</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Mali:wght@400;500;600;700&display=swap');
+
+		:root {
+			color-scheme: light;
+			--pink: #ff82a9;
+			--deep-pink: #e95687;
+			--ink: #604955;
+			--soft-ink: #947d87;
+			--cream: #fffaf5;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			min-height: 100vh;
+			margin: 0;
+			display: grid;
+			place-items: center;
+			overflow: hidden;
+			padding: 24px;
+			color: var(--ink);
+			background:
+				radial-gradient(ellipse at 14% 17%, #ffe2ed 0, transparent 32%),
+				radial-gradient(ellipse at 88% 85%, #ffefd9 0, transparent 35%),
+				#fff8fb;
+			font-family: 'Kanit', sans-serif;
+		}
+
+		.sparkle-field, .sparkle-field::before, .sparkle-field::after {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+		}
+
+		.sparkle-field::before, .sparkle-field::after {
+			content: '✦　 ·　♡　　✧　　 ·　♡　　✦　 ·';
+			color: #f6a9c3;
+			font-size: 20px;
+			letter-spacing: 28px;
+			line-height: 110px;
+			opacity: .35;
+			transform: rotate(-12deg) scale(1.4);
+			animation: drift 18s ease-in-out infinite alternate;
+		}
+
+		.sparkle-field::after {
+			content: '·　♡　 ✧　　·　✦　　♡　 ·　✧';
+			color: #efc18c;
+			transform: rotate(10deg) scale(1.5) translateY(30px);
+			animation-delay: -8s;
+		}
+
+		.card {
+			position: relative;
+			z-index: 1;
+			width: min(100%, 470px);
+			padding: 42px 36px 34px;
+			overflow: hidden;
+			border: 1px solid rgba(255, 255, 255, .9);
+			border-radius: 32px;
+			background: rgba(255, 255, 255, .86);
+			box-shadow: 0 24px 80px rgba(196, 113, 145, .16), 0 4px 14px rgba(196, 113, 145, .08);
+			text-align: center;
+			backdrop-filter: blur(12px);
+			animation: card-in .8s cubic-bezier(.2,.8,.2,1) both;
+		}
+
+		.card::before {
+			position: absolute;
+			top: 0;
+			left: 12%;
+			width: 76%;
+			height: 5px;
+			border-radius: 0 0 10px 10px;
+			background: linear-gradient(90deg, #ffd2df, #ff8bae, #ffd2df);
+			content: '';
+		}
+
+		.sticker {
+			display: grid;
+			width: 112px;
+			height: 112px;
+			margin: 0 auto 17px;
+			place-items: center;
+			border: 1px solid #ffe2eb;
+			border-radius: 36px;
+			background: linear-gradient(145deg, #fff1f6, #fff9f0);
+			box-shadow: 0 12px 28px rgba(233, 86, 135, .12);
+			font-size: 60px;
+			animation: bob 3s ease-in-out infinite;
+		}
+
+		.eyebrow {
+			margin: 0 0 8px;
+			color: var(--deep-pink);
+			font-family: 'Mali', cursive;
+			font-size: 14px;
+			font-weight: 600;
+			letter-spacing: .5px;
+		}
+
+		h1 {
+			margin: 0;
+			font-family: 'Mali', 'Kanit', sans-serif;
+			font-size: clamp(27px, 7vw, 37px);
+			font-weight: 700;
+			line-height: 1.4;
+		}
+
+		.message {
+			margin: 15px auto 23px;
+			color: var(--soft-ink);
+			font-size: 16px;
+			line-height: 1.9;
+		}
+
+		.question {
+			display: inline-block;
+			margin-top: 2px;
+			color: var(--deep-pink);
+			font-family: 'Mali', sans-serif;
+			font-size: 21px;
+			font-weight: 700;
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+
+		.buttons[hidden] { display: none; }
+
+		button {
+			min-height: 48px;
+			padding: 11px 22px;
+			border: 0;
+			border-radius: 999px;
+			cursor: pointer;
+			font: 500 15px 'Kanit', sans-serif;
+			transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+		}
+
+		button:focus-visible { outline: 3px solid #f5adca; outline-offset: 4px; }
+
+		.yes-button {
+			color: white;
+			background: linear-gradient(135deg, #ff91b2, #f26e9a);
+			box-shadow: 0 8px 20px rgba(233, 86, 135, .25);
+		}
+
+		.yes-button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 24px rgba(233, 86, 135, .31); }
+
+		.think-button {
+			color: #947d87;
+			background: #fff7f9;
+			box-shadow: inset 0 0 0 1px #f7e6eb;
+		}
+
+		.think-button:hover { transform: translateY(-2px); background: #fff0f4; }
+
+		.footnote {
+			margin: 21px 0 0;
+			color: #b39ea7;
+			font-size: 12px;
+		}
+
+		.response {
+			display: none;
+			margin: 21px 0 0;
+			padding: 14px 16px;
+			border-radius: 18px;
+			background: #fff4f7;
+			color: #89586a;
+			font-size: 15px;
+			line-height: 1.8;
+			animation: card-in .35s ease both;
+		}
+
+		.response.visible { display: block; }
+		.response strong { color: var(--deep-pink); }
+
+		.heart {
+			position: fixed;
+			z-index: 2;
+			bottom: -30px;
+			pointer-events: none;
+			animation: float-up linear forwards;
+		}
+
+		.confetti {
+			position: fixed;
+			z-index: 3;
+			top: -15px;
+			pointer-events: none;
+			animation: confetti-fall linear forwards;
+		}
+
+		@keyframes card-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+		@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+		@keyframes drift { from { transform: rotate(-12deg) scale(1.4) translateY(-10px); } to { transform: rotate(-12deg) scale(1.4) translateY(24px); } }
+		@keyframes float-up { to { transform: translateY(-110vh) rotate(24deg); opacity: 0; } }
+		@keyframes confetti-fall { to { transform: translateY(110vh) rotate(720deg); opacity: .15; } }
+
+		@media (max-width: 480px) {
+			body { padding: 16px; }
+			.card { padding: 34px 23px 28px; border-radius: 27px; }
+			.sticker { width: 96px; height: 96px; border-radius: 31px; font-size: 52px; }
+			.message { font-size: 15px; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+		}
+	</style>
+</head>
+<body>
+	<div class="sparkle-field" aria-hidden="true"></div>
+	<main class="card" aria-labelledby="title">
+		<div class="sticker" id="sticker" aria-hidden="true">🧸💌</div>
+		<p class="eyebrow">มีเรื่องน่ารัก ๆ อยากบอก ♡</p>
+		<h1 id="title">เราชอบเธอนะ</h1>
+		<p class="message" id="message">
+			อยู่ด้วยแล้วเรายิ้มเก่งขึ้นเยอะเลย<br>
+			เลยอยากถามอะไรสักอย่าง...<br>
+			<span class="question">มาเป็นแฟนกันไหม? 🌷</span>
+		</p>
+		<div class="buttons" id="buttons">
+			<button class="yes-button" id="yesButton" type="button">ตกลง เย้! 💖</button>
+			<button class="think-button" id="thinkButton" type="button">ขอคิดดูก่อนนะ 🌼</button>
+		</div>
+		<p class="footnote" id="footnote">ไม่ต้องรีบตอบก็ได้นะ แค่อยากบอกให้รู้ ☁️</p>
+		<p class="response" id="response" role="status" aria-live="polite"></p>
+	</main>
+
+	<script>
+		const sticker = document.querySelector('#sticker');
+		const title = document.querySelector('#title');
+		const message = document.querySelector('#message');
+		const buttons = document.querySelector('#buttons');
+		const footnote = document.querySelector('#footnote');
+		const response = document.querySelector('#response');
+		const yesButton = document.querySelector('#yesButton');
+		const thinkButton = document.querySelector('#thinkButton');
+		const heartEmojis = ['💗', '💕', '💖', '💞', '🌸', '✨'];
+
+		function showResponse(text) {
+			response.innerHTML = text;
+			response.classList.add('visible');
+		}
+
+		function celebrate() {
+			sticker.textContent = '🥰💖';
+			title.textContent = 'เย้! ดีใจที่สุดเลย 💕';
+			message.innerHTML = 'ขอบคุณที่ตอบตกลงนะ<br>จากนี้ขอฝากหัวใจไว้ด้วยน้า 🌷';
+			buttons.hidden = true;
+			footnote.hidden = true;
+			showResponse('วันนี้เป็นวันที่พิเศษที่สุดเลย <strong>รักนะ 💖</strong>');
+
+			for (let i = 0; i < 34; i++) {
+				const piece = document.createElement('span');
+				piece.className = 'confetti';
+				piece.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+				piece.style.left = `${Math.random() * 100}vw`;
+				piece.style.animationDuration = `${2.2 + Math.random() * 2.4}s`;
+				piece.style.animationDelay = `${Math.random() * .8}s`;
+				piece.style.fontSize = `${14 + Math.random() * 15}px`;
+				document.body.append(piece);
+				window.setTimeout(() => piece.remove(), 5500);
+			}
+		}
+
+		function offerTime() {
+			showResponse('ไม่เป็นไรเลย ค่อย ๆ คิดก็ได้นะ <strong>ความรู้สึกของเธอสำคัญที่สุด 🌼</strong>');
+			thinkButton.textContent = 'ขอบคุณที่เข้าใจนะ 💛';
+			thinkButton.disabled = true;
+			thinkButton.style.opacity = '.72';
+		}
+
+		yesButton.addEventListener('click', celebrate);
+		thinkButton.addEventListener('click', offerTime);
+
+		window.setInterval(() => {
+			const heart = document.createElement('span');
+			heart.className = 'heart';
+			heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+			heart.style.left = `${Math.random() * 100}vw`;
+			heart.style.fontSize = `${13 + Math.random() * 15}px`;
+			heart.style.animationDuration = `${7 + Math.random() * 6}s`;
+			document.body.append(heart);
+			window.setTimeout(() => heart.remove(), 14000);
+		}, 1500);
+	</script>
+</body>
+</html>
